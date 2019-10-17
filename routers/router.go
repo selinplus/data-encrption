@@ -37,8 +37,6 @@ func InitRouter() *gin.Engine {
 	apiv1 := r.Group("/api/v1")
 	//apiv1.Use(jwt.JWT())
 	{
-		//获取部门详情
-		apiv1.GET("/department/detail", v1.GetDepartmentByID)
 		//获取部门列表
 		apiv1.GET("/department/list", v1.GetDepartmentByParentID)
 		//获取部门用户列表

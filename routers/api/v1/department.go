@@ -8,18 +8,6 @@ import (
 	"net/http"
 )
 
-//获取部门详情
-func GetDepartmentByID(c *gin.Context) {
-	var appG = app.Gin{C: c}
-	id := c.Query("id")
-	department, errd := models.GetDepartByID(id)
-	if errd != nil {
-		appG.Response(http.StatusInternalServerError, e.ERROR_GET_DEPARTMENT_FAIL, nil)
-		return
-	}
-	appG.Response(http.StatusOK, e.SUCCESS, department)
-}
-
 //获取部门列表
 func GetDepartmentByParentID(c *gin.Context) {
 	var appG = app.Gin{C: c}
@@ -31,9 +19,9 @@ func GetDepartmentByParentID(c *gin.Context) {
 	}
 	var dts []interface{}
 	data := map[string]interface{}{
-		"key":      parentDt.ID,
-		"value":    parentDt.ID,
-		"title":    parentDt.DepartName,
+		"id":       parentDt.ID,
+		"parentid": parentDt.ParentID,
+		"name":     parentDt.DepartName,
 		"children": dts,
 	}
 	departments, err := models.GetDepartByParentID(id)
@@ -45,10 +33,10 @@ func GetDepartmentByParentID(c *gin.Context) {
 		for _, department := range departments {
 			leaf := models.IsLeafDepart(department.ID)
 			dt := map[string]interface{}{
-				"key":    department.ID,
-				"value":  department.ID,
-				"title":  parentDt.DepartName,
-				"isLeaf": leaf,
+				"id":       department.ID,
+				"parentid": department.ParentID,
+				"name":     parentDt.DepartName,
+				"isLeaf":   leaf,
 			}
 			dts = append(dts, dt)
 		}
